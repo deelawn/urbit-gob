@@ -12,7 +12,7 @@ var (
 	uxFFFFFFFF00000000, _ = big.NewInt(0).SetString("ffffffff00000000", 16)
 	u65535                = big.NewInt(65535)
 	u65536                = big.NewInt(65536)
-	raku                  = []uint{0xb76d5eed, 0xee281300, 0x85bcae01, 0x4b387af7}
+	raku                  = []uint32{0xb76d5eed, 0xee281300, 0x85bcae01, 0x4b387af7}
 )
 
 func F(j int, arg *big.Int) *big.Int {
@@ -121,7 +121,7 @@ func feLoop(
 
 	if j > r {
 
-		if r%2 == 0 || arr.Cmp(a) == 0 {
+		if r%2 != 0 || arr.Cmp(a) == 0 {
 			return big.NewInt(0).Add(big.NewInt(0).Mul(a, arr), ell)
 		}
 
@@ -130,7 +130,7 @@ func feLoop(
 
 	eff := F(j-1, arr)
 	tmp := big.NewInt(0).Add(ell, eff)
-	if j%2 == 0 {
+	if j%2 != 0 {
 		tmp = tmp.Mod(tmp, a)
 	} else {
 		tmp = tmp.Mod(tmp, b)
