@@ -323,7 +323,7 @@ func splat(chunks []string) string {
 	for _, chunk := range chunks {
 
 		syls := []string{chunk}
-		if len(syls) > 3 {
+		if len(chunk) > 3 {
 			syls = []string{chunk[:3], chunk[3:]}
 		}
 		if len(syls) == 1 {
