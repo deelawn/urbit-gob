@@ -201,7 +201,12 @@ func Patq(arg string) (string, error) {
 		return "", fmt.Errorf(errInvalidInt, arg)
 	}
 
-	return buf2patq(v.Bytes()), nil
+	buf := v.Bytes()
+	// This is needed for a value of zero
+	if len(buf) == 0 {
+		buf = []byte{0}
+	}
+	return buf2patq(buf), nil
 }
 
 func buf2patq(buf []byte) string {
@@ -263,6 +268,7 @@ func chunk(items []byte, size int) [][]byte {
 		sliceLength := len(slices)
 		if sliceLength == 0 || len(slices[sliceLength-1]) == size {
 			slices = append(slices, []byte{})
+			sliceLength++
 		}
 
 		slices[sliceLength-1] = append(slices[sliceLength-1], item)
@@ -428,7 +434,7 @@ func IsValidPat(name string) bool {
 		}
 	}
 
-	return sylsLen%2 != 0 && sylsLen != 1
+	return !(sylsLen%2 != 0 && sylsLen != 1)
 }
 
 func IsValidPatp(str string) bool {

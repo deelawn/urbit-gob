@@ -58,7 +58,7 @@ func fyndLoop(cry *big.Int) *big.Int {
 	}
 
 	if cry.Cmp(ux100000000) >= 0 && cry.Cmp(uxFFFFFFFFFFFFFFFF) <= 0 {
-		return big.NewInt(0).Or(hi, feinLoop(lo))
+		return big.NewInt(0).Or(hi, fyndLoop(lo))
 	}
 
 	return cry
