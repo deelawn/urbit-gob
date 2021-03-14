@@ -120,6 +120,7 @@ func end(a, b, c *big.Int) *big.Int {
 	return big.NewInt(0).Mod(c, bex(big.NewInt(0).Mul(bex(a), b)))
 }
 
+// Hex2Patp converts a hex-encoded string to a @p-encoded string.
 func Hex2Patp(hex string) (string, error) {
 
 	v, ok := big.NewInt(0).SetString(hex, 16)
@@ -130,6 +131,7 @@ func Hex2Patp(hex string) (string, error) {
 	return Patp(v.String())
 }
 
+// Patp2Hex converts a @p-encoded string to a hex-encoded string.
 func Patp2Hex(name string) (string, error) {
 
 	if !IsValidPat(name) {
@@ -188,6 +190,7 @@ func patp2bn(name string) (*big.Int, error) {
 	return hex, nil
 }
 
+// Patp2Dec converts a @p-encoded string to a decimal-encoded string.
 func Patp2Dec(name string) (string, error) {
 
 	dec, err := patp2bn(name)
@@ -198,6 +201,7 @@ func Patp2Dec(name string) (string, error) {
 	return dec.String(), nil
 }
 
+// Patq converts a number to a @q-encoded string.
 func Patq(arg string) (string, error) {
 
 	v, ok := big.NewInt(0).SetString(arg, 10)
@@ -281,6 +285,8 @@ func chunk(items []byte, size int) [][]byte {
 	return slices
 }
 
+// Hex2Patq converts a hex-encoded string to a @q-encoded string.
+// Note that this preserves leading zero bytes.
 func Hex2Patq(arg string) (string, error) {
 
 	hexStr := arg
@@ -296,6 +302,8 @@ func Hex2Patq(arg string) (string, error) {
 	return buf2patq(buf), nil
 }
 
+// Patq2Hex converts a @q-encoded string to a hex-encoded string.
+// Note that this preserves leading zero bytes.
 func Patq2Hex(name string) (string, error) {
 
 	if !IsValidPat(name) {
@@ -355,6 +363,7 @@ func patq2bn(name string) (*big.Int, error) {
 	return v, nil
 }
 
+// Patq2Dec converts a @q-encoded string to a decimal-encoded string.
 func Patq2Dec(name string) (string, error) {
 
 	v, err := patq2bn(name)
@@ -365,6 +374,7 @@ func Patq2Dec(name string) (string, error) {
 	return v.String(), nil
 }
 
+// Clan determines the ship class of a @p value.
 func Clan(who string) (string, error) {
 
 	name, err := patp2bn(who)
@@ -390,6 +400,7 @@ func Clan(who string) (string, error) {
 	return comet, nil
 }
 
+// Sein determines the parent of a @p value.
 func Sein(name string) (string, error) {
 
 	who, err := patp2bn(name)
@@ -419,6 +430,15 @@ func Sein(name string) (string, error) {
 	return Patp(res.String())
 }
 
+/*
+IsValidPat weakly checks if a string is a valid @p or @q value.
+
+This is, at present, a pretty weak sanity check.  It doesn't confirm the
+structure precisely (e.g. dashes), and for @q, it's required that q values
+of (greater than one) odd bytelength have been zero-padded.  So, for
+example, '~doznec-binwod' will be considered a valid @q, but '~nec-binwod'
+will not.
+*/
 func IsValidPat(name string) bool {
 
 	if len(name) < 4 || name[0] != '~' {
@@ -441,6 +461,7 @@ func IsValidPat(name string) bool {
 	return !(sylsLen%2 != 0 && sylsLen != 1)
 }
 
+// IsValidPatp validates a @p string.
 func IsValidPatp(str string) bool {
 
 	dec, err := Patp2Dec(str)
@@ -456,6 +477,7 @@ func IsValidPatp(str string) bool {
 	return IsValidPat(str) && str == p
 }
 
+// IsValidPatq validates a @q string.
 func IsValidPatq(str string) bool {
 
 	dec, err := Patq2Dec(str)
@@ -492,6 +514,7 @@ func eqModLeadingZeros(s, t string) bool {
 	return removeLeadingZeros(s) == removeLeadingZeros(t)
 }
 
+// EqPatq performs an equality comparison on @q values.
 func EqPatq(p, q string) (bool, error) {
 
 	phex, err := Patq2Hex(p)
@@ -507,6 +530,7 @@ func EqPatq(p, q string) (bool, error) {
 	return eqModLeadingZeros(phex, qhex), nil
 }
 
+// Patp converts a number to a @p-encoded string.
 func Patp(arg string) (string, error) {
 
 	v, ok := big.NewInt(0).SetString(arg, 10)
