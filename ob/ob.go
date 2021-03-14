@@ -1,8 +1,10 @@
-package urbitgob
+package ob
 
 import (
 	"fmt"
 	"math/big"
+
+	ugi "github.com/deelawn/urbit-gob/internal"
 )
 
 var (
@@ -28,7 +30,7 @@ func Fein(arg string) (*big.Int, error) {
 
 	v, ok := big.NewInt(0).SetString(arg, 10)
 	if !ok {
-		return nil, fmt.Errorf(errInvalidInt, arg)
+		return nil, fmt.Errorf(ugi.ErrInvalidInt, arg)
 	}
 
 	return feinLoop(v)
@@ -97,7 +99,7 @@ func Feis(arg string) (*big.Int, error) {
 
 	v, ok := big.NewInt(0).SetString(arg, 10)
 	if !ok {
-		return nil, fmt.Errorf(errInvalidInt, arg)
+		return nil, fmt.Errorf(ugi.ErrInvalidInt, arg)
 	}
 
 	return Fe(4, u65535, u65536, uxFFFFFFFF, v), nil
@@ -168,7 +170,7 @@ func Tail(arg string) (*big.Int, error) {
 
 	v, ok := big.NewInt(0).SetString(arg, 10)
 	if !ok {
-		return nil, fmt.Errorf(errInvalidInt, arg)
+		return nil, fmt.Errorf(ugi.ErrInvalidInt, arg)
 	}
 
 	return Fen(4, u65535, u65536, uxFFFFFFFF, v), nil

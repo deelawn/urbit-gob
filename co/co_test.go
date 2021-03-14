@@ -1,4 +1,4 @@
-package urbitgob
+package co
 
 import (
 	"testing"

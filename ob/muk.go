@@ -1,4 +1,4 @@
-package urbitgob
+package ob
 
 import (
 	"math/big"

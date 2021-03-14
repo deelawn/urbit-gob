@@ -1,4 +1,4 @@
-package urbitgob
+package co
 
 import (
 	"encoding/hex"
@@ -7,6 +7,9 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	ugi "github.com/deelawn/urbit-gob/internal"
+	"github.com/deelawn/urbit-gob/ob"
 )
 
 const (
@@ -66,13 +69,6 @@ var (
 	suffixes      = regexp.MustCompile(namePartitionPattern).FindAllString(suf, -1)
 	prefixesIndex = map[string]int{}
 	suffixesIndex = map[string]int{}
-
-	// Error format strings
-	errInvalidBin string = "invalid binary string: %s"
-	errInvalidHex string = "invalid hexadecimal string: %s"
-	errInvalidInt string = "invalid integer string: %s"
-	errInvalidP   string = "invalid @p: %s"
-	errInvalidQ   string = "invalid @q: %s"
 )
 
 func init() {
@@ -125,7 +121,7 @@ func Hex2Patp(hex string) (string, error) {
 
 	v, ok := big.NewInt(0).SetString(hex, 16)
 	if !ok {
-		return "", fmt.Errorf(errInvalidHex, hex)
+		return "", fmt.Errorf(ugi.ErrInvalidHex, hex)
 	}
 
 	return Patp(v.String())
@@ -135,7 +131,7 @@ func Hex2Patp(hex string) (string, error) {
 func Patp2Hex(name string) (string, error) {
 
 	if !IsValidPat(name) {
-		return "", fmt.Errorf(errInvalidP, name)
+		return "", fmt.Errorf(ugi.ErrInvalidP, name)
 	}
 
 	syls := patp2syls(name)
@@ -152,10 +148,10 @@ func Patp2Hex(name string) (string, error) {
 
 	bigAddr, ok := big.NewInt(0).SetString(addr, 2)
 	if !ok {
-		return "", fmt.Errorf(errInvalidBin, addr)
+		return "", fmt.Errorf(ugi.ErrInvalidBin, addr)
 	}
 
-	v, err := Fynd(bigAddr)
+	v, err := ob.Fynd(bigAddr)
 	if err != nil {
 		return "", nil
 	}
@@ -184,7 +180,7 @@ func patp2bn(name string) (*big.Int, error) {
 
 	hex, ok := big.NewInt(0).SetString(hexStr, 16)
 	if !ok {
-		return nil, fmt.Errorf(errInvalidHex, hexStr)
+		return nil, fmt.Errorf(ugi.ErrInvalidHex, hexStr)
 	}
 
 	return hex, nil
@@ -206,7 +202,7 @@ func Patq(arg string) (string, error) {
 
 	v, ok := big.NewInt(0).SetString(arg, 10)
 	if !ok {
-		return "", fmt.Errorf(errInvalidInt, arg)
+		return "", fmt.Errorf(ugi.ErrInvalidInt, arg)
 	}
 
 	buf := v.Bytes()
@@ -296,7 +292,7 @@ func Hex2Patq(arg string) (string, error) {
 
 	buf, err := hex.DecodeString(hexStr)
 	if err != nil {
-		return "", fmt.Errorf(errInvalidHex, arg)
+		return "", fmt.Errorf(ugi.ErrInvalidHex, arg)
 	}
 
 	return buf2patq(buf), nil
@@ -307,7 +303,7 @@ func Hex2Patq(arg string) (string, error) {
 func Patq2Hex(name string) (string, error) {
 
 	if !IsValidPat(name) {
-		return "", fmt.Errorf(errInvalidQ, name)
+		return "", fmt.Errorf(ugi.ErrInvalidQ, name)
 	}
 
 	if len(name) == 0 {
@@ -357,7 +353,7 @@ func patq2bn(name string) (*big.Int, error) {
 
 	v, ok := big.NewInt(0).SetString(hexStr, 16)
 	if !ok {
-		return nil, fmt.Errorf(errInvalidHex, name)
+		return nil, fmt.Errorf(ugi.ErrInvalidHex, name)
 	}
 
 	return v, nil
@@ -535,10 +531,10 @@ func Patp(arg string) (string, error) {
 
 	v, ok := big.NewInt(0).SetString(arg, 10)
 	if !ok {
-		return "", fmt.Errorf(errInvalidInt, arg)
+		return "", fmt.Errorf(ugi.ErrInvalidInt, arg)
 	}
 
-	sxz, err := Fein(v.String())
+	sxz, err := ob.Fein(v.String())
 	if err != nil {
 		return "", err
 	}
