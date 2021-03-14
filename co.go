@@ -510,7 +510,7 @@ func Patp(arg string) (string, error) {
 
 	p := "~"
 
-	if dyx.Cmp(one) == -1 {
+	if dyx.Cmp(one) <= 0 {
 		p += suffixes[int(sxz.Int64())]
 	} else {
 		p += patpLoop(dyy, sxz, zero, "")
