@@ -120,7 +120,6 @@ func end(a, b, c *big.Int) *big.Int {
 	return big.NewInt(0).Mod(c, bex(big.NewInt(0).Mul(bex(a), b)))
 }
 
-// TODO: look everywhere that uses SetString and return errors on failure
 func Hex2Patp(hex string) (string, error) {
 
 	v, ok := big.NewInt(0).SetString(hex, 16)
@@ -154,7 +153,12 @@ func Patp2Hex(name string) (string, error) {
 		return "", fmt.Errorf(errInvalidBin, addr)
 	}
 
-	hex := Fynd(bigAddr).Text(16)
+	v, err := Fynd(bigAddr)
+	if err != nil {
+		return "", nil
+	}
+
+	hex := v.Text(16)
 
 	if len(hex)%2 != 0 {
 		return "0" + hex, nil
@@ -510,7 +514,11 @@ func Patp(arg string) (string, error) {
 		return "", fmt.Errorf(errInvalidInt, arg)
 	}
 
-	sxz := Fein(v.String())
+	sxz, err := Fein(v.String())
+	if err != nil {
+		return "", err
+	}
+
 	dyy := met(four, sxz, nil)
 	dyx := met(three, sxz, nil)
 

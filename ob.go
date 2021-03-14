@@ -1,6 +1,7 @@
 package urbitgob
 
 import (
+	"fmt"
 	"math/big"
 )
 
@@ -23,45 +24,65 @@ func F(j int, arg *big.Int) *big.Int {
 // TODO: this looping code can be combined into a single loop function that accepts an additional
 // function argument. In Fein's case it would be Feis and in Fynd's case it would be Tail.
 
-func Fein(arg string) *big.Int {
+func Fein(arg string) (*big.Int, error) {
 
-	v, _ := big.NewInt(0).SetString(arg, 10)
+	v, ok := big.NewInt(0).SetString(arg, 10)
+	if !ok {
+		return nil, fmt.Errorf(errInvalidInt, arg)
+	}
+
 	return feinLoop(v)
 }
 
-func feinLoop(pyn *big.Int) *big.Int {
+func feinLoop(pyn *big.Int) (*big.Int, error) {
 
 	hi, lo := loopHiLoInit(pyn)
 
 	if pyn.Cmp(ux10000) >= 0 && pyn.Cmp(uxFFFFFFFF) <= 0 {
-		return big.NewInt(0).Add(ux10000, Feis(big.NewInt(0).Sub(pyn, ux10000).String()))
+		v, err := Feis(big.NewInt(0).Sub(pyn, ux10000).String())
+		if err != nil {
+			return nil, err
+		}
+		return big.NewInt(0).Add(ux10000, v), nil
 	}
 
 	if pyn.Cmp(ux100000000) >= 0 && pyn.Cmp(uxFFFFFFFFFFFFFFFF) <= 0 {
-		return big.NewInt(0).Or(hi, feinLoop(lo))
+		v, err := feinLoop(lo)
+		if err != nil {
+			return nil, err
+		}
+		return big.NewInt(0).Or(hi, v), nil
 	}
 
-	return pyn
+	return pyn, nil
 }
 
-func Fynd(arg *big.Int) *big.Int {
+func Fynd(arg *big.Int) (*big.Int, error) {
 
 	return fyndLoop(arg)
 }
 
-func fyndLoop(cry *big.Int) *big.Int {
+func fyndLoop(cry *big.Int) (*big.Int, error) {
 
 	hi, lo := loopHiLoInit(cry)
 
 	if cry.Cmp(ux10000) >= 0 && cry.Cmp(uxFFFFFFFF) <= 0 {
-		return big.NewInt(0).Add(ux10000, Tail(big.NewInt(0).Sub(cry, ux10000).String()))
+		v, err := Tail(big.NewInt(0).Sub(cry, ux10000).String())
+		if err != nil {
+			return nil, err
+		}
+		return big.NewInt(0).Add(ux10000, v), nil
 	}
 
 	if cry.Cmp(ux100000000) >= 0 && cry.Cmp(uxFFFFFFFFFFFFFFFF) <= 0 {
-		return big.NewInt(0).Or(hi, fyndLoop(lo))
+		v, err := fyndLoop(lo)
+		if err != nil {
+			return nil, err
+		}
+		return big.NewInt(0).Or(hi, v), nil
 	}
 
-	return cry
+	return cry, nil
 }
 
 func loopHiLoInit(v *big.Int) (*big.Int, *big.Int) {
@@ -72,10 +93,14 @@ func loopHiLoInit(v *big.Int) (*big.Int, *big.Int) {
 	return hi, lo
 }
 
-func Feis(arg string) *big.Int {
+func Feis(arg string) (*big.Int, error) {
 
-	v, _ := big.NewInt(0).SetString(arg, 10)
-	return Fe(4, u65535, u65536, uxFFFFFFFF, v)
+	v, ok := big.NewInt(0).SetString(arg, 10)
+	if !ok {
+		return nil, fmt.Errorf(errInvalidInt, arg)
+	}
+
+	return Fe(4, u65535, u65536, uxFFFFFFFF, v), nil
 }
 
 // TODO: merge Fe and Fen code to accept an additional function argument.
@@ -139,10 +164,14 @@ func feLoop(
 	return feLoop(r, a, b, j+1, arr, tmp)
 }
 
-func Tail(arg string) *big.Int {
+func Tail(arg string) (*big.Int, error) {
 
-	v, _ := big.NewInt(0).SetString(arg, 10)
-	return Fen(4, u65535, u65536, uxFFFFFFFF, v)
+	v, ok := big.NewInt(0).SetString(arg, 10)
+	if !ok {
+		return nil, fmt.Errorf(errInvalidInt, arg)
+	}
+
+	return Fen(4, u65535, u65536, uxFFFFFFFF, v), nil
 }
 
 func Fen(
