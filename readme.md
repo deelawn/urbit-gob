@@ -1,5 +1,5 @@
 # urbit-gob
-### A go port of [urbit-ob](https://github.com/urbit/urbit-ob)
+### A go implementation of [urbit-ob](https://github.com/urbit/urbit-ob)
 
 ---
 
