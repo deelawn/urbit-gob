@@ -46,11 +46,13 @@ const (
 		"nydhusrelrudneshesfetdesretdunlernyrsebhulryllud" +
 		"remlysfynwerrycsugnysnyllyndyndemluxfedsedbecmun" +
 		"lyrtesmudnytbyrsenwegfyrmurtelreptegpecnelnevfes"
-	galaxy string = "galaxy"
-	star   string = "star"
-	planet string = "planet"
-	moon   string = "moon"
-	comet  string = "comet"
+
+	ShipClassEmpty  string = ""
+	ShipClassGalaxy string = "galaxy"
+	ShipClassStar   string = "star"
+	ShipClassPlanet string = "planet"
+	ShipClassMoon   string = "moon"
+	ShipClassComet  string = "comet"
 )
 
 var (
@@ -375,25 +377,25 @@ func Clan(who string) (string, error) {
 
 	name, err := patp2bn(who)
 	if err != nil {
-		return "", err
+		return ShipClassEmpty, err
 	}
 
 	wid := met(three, name, nil)
 
 	if wid.Cmp(one) <= 0 {
-		return galaxy, nil
+		return ShipClassGalaxy, nil
 	}
 	if wid.Cmp(two) <= 0 {
-		return star, nil
+		return ShipClassStar, nil
 	}
 	if wid.Cmp(four) <= 0 {
-		return planet, nil
+		return ShipClassPlanet, nil
 	}
 	if wid.Cmp(eight) <= 0 {
-		return moon, nil
+		return ShipClassMoon, nil
 	}
 
-	return comet, nil
+	return ShipClassComet, nil
 }
 
 // Sein determines the parent of a @p value.
@@ -411,13 +413,13 @@ func Sein(name string) (string, error) {
 
 	var res *big.Int
 	switch mir {
-	case galaxy:
+	case ShipClassGalaxy:
 		res = who
-	case star:
+	case ShipClassStar:
 		res = end(three, one, who)
-	case planet:
+	case ShipClassPlanet:
 		res = end(four, one, who)
-	case moon:
+	case ShipClassMoon:
 		res = end(five, one, who)
 	default:
 		res = zero

@@ -151,51 +151,51 @@ func TestClan(t *testing.T) {
 	var testCases = []stdTestCase{
 		{
 			in:  "~zod",
-			out: galaxy,
+			out: ShipClassGalaxy,
 		},
 		{
 			in:  "~fes",
-			out: galaxy,
+			out: ShipClassGalaxy,
 		},
 		{
 			in:  "~marzod",
-			out: star,
+			out: ShipClassStar,
 		},
 		{
 			in:  "~fipfes",
-			out: star,
+			out: ShipClassStar,
 		},
 		{
 			in:  "~dapnep-ronmyl",
-			out: planet,
+			out: ShipClassPlanet,
 		},
 		{
 			in:  "~rosmur-hobrem",
-			out: planet,
+			out: ShipClassPlanet,
 		},
 		{
 			in:  "~sallus-nodlut",
-			out: planet,
+			out: ShipClassPlanet,
 		},
 		{
 			in:  "~marder-mopdur",
-			out: planet,
+			out: ShipClassPlanet,
 		},
 		{
 			in:  "~laphec-savted",
-			out: planet,
+			out: ShipClassPlanet,
 		},
 		{
 			in:  "~dostec-risfen",
-			out: planet,
+			out: ShipClassPlanet,
 		},
 		{
 			in:  "~divrul-dalred-samhec-sidrex",
-			out: moon,
+			out: ShipClassMoon,
 		},
 		{
 			in:  "~dotmec-niblyd-tocdys-ravryg--panper-hilsug-nidnev-marzod",
-			out: comet,
+			out: ShipClassComet,
 		},
 		{
 			in:              "abcdefg",
