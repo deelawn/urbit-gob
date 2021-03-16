@@ -57,13 +57,13 @@ func main() {
 	// name = ~fipfes
 	name, err := co.Patp("65535")
 	if err != nil {
-		panic("patp")
+		panic(err)
 	}
 
 	// sponsor = ~fes
 	sponsor, err := co.Sein(name)
 	if err != nil {
-		panic("sein")
+		panic(err)
 	}
 }
 ```
