@@ -12,7 +12,7 @@
 ~zod
 > go run cmd/main.go clan ~marzod
 star
-> go 
+> go run cmd/main.go --help
 Usage: ...main COMMAND args...
 
 Valid commands:
