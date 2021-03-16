@@ -66,19 +66,30 @@ var (
 	five  = big.NewInt(5)
 	eight = big.NewInt(8)
 
-	// Prefixes and suffixes
-	prefixes      = regexp.MustCompile(namePartitionPattern).FindAllString(pre, -1)
-	suffixes      = regexp.MustCompile(namePartitionPattern).FindAllString(suf, -1)
+	// Prefixes is the slice of three letter strings that can be used as the first
+	// of two syllables in a syllable pair that makes up a ship name.
+	Prefixes = regexp.MustCompile(namePartitionPattern).FindAllString(pre, -1)
+	// Suffixes is the slice of three letter strings that can be used as the second
+	// of two syllables, or one of one syllables in the case of galaxies, that make up a ship name.
+	Suffixes = regexp.MustCompile(namePartitionPattern).FindAllString(suf, -1)
+
 	prefixesIndex = map[string]int{}
 	suffixesIndex = map[string]int{}
+	prefixes      = make([]string, len(Prefixes))
+	suffixes      = make([]string, len(Suffixes))
 )
 
 func init() {
 
+	// Copy the prefixes and suffixes slices so that any changes made by someone
+	// aren't used when doing calculations
+	_ = copy(prefixes, Prefixes)
+	_ = copy(suffixes, Suffixes)
+
 	// This assumes length of prefixes and suffixes are the same, which they should be.
-	for i := 0; i < len(prefixes); i++ {
-		prefixesIndex[prefixes[i]] = i
-		suffixesIndex[suffixes[i]] = i
+	for i := 0; i < len(Prefixes); i++ {
+		prefixesIndex[Prefixes[i]] = i
+		suffixesIndex[Suffixes[i]] = i
 	}
 }
 
