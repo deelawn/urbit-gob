@@ -3,6 +3,9 @@
 
 ---
 
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/deelawn/urbit-gob)
+[![GoReportCard](https://goreportcard.com/badge/github.com/nanomsg/mangos)](https://goreportcard.com/report/github.com/deelawn/urbit-gob)
+
 #### Command line use
 ```
 > go run cmd/main.go patp 0
